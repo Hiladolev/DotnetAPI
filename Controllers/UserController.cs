@@ -13,6 +13,11 @@ public UserController(IConfiguration config)
 _dapper = new DataContextDapper(config);
 }
 
+[HttpGet("TextConnection")]
+public DateTime TestConnection()
+{
+    return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
+}
 [HttpGet("GetUsers/{testValue}")]
 
 public string[] GetUsers(string testValue)
