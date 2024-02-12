@@ -8,6 +8,10 @@ namespace DotnetAPI.Controllers;
 public class UserController : ControllerBase
 {
 
+public UserController(IConfiguration config)
+{
+    Console.WriteLine(config.GetConnectionString("DefaultConnection"));
+}
 
 [HttpGet("GetUsers/{testValue}")]
 
