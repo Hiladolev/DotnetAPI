@@ -35,4 +35,21 @@ public IEnumerable<User> GetUsers()
      IEnumerable<User> users = _dapper.LoadData<User>(sql);
 return users;
 }
+[HttpGet("GetSingleUser/{UserId}")]
+
+public User GetSingleUser(int UserId)
+{
+    string sql = @"
+        SELECT [UserId],
+            [FirstName],
+            [LastName],
+            [Email],
+            [Gender],
+            [Active] 
+            FROM TutorialAppSchema.Users 
+                WHERE UserId = " + UserId.ToString();
+
+     User user = _dapper.LoadDataSingle<User>(sql);
+return user;
+}
 }
