@@ -1,3 +1,4 @@
+using DotnetAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetAPI.Controllers;
@@ -18,10 +19,20 @@ public DateTime TestConnection()
 {
     return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
 }
-[HttpGet("GetUsers/{testValue}")]
+[HttpGet("GetUsers")]
 
-public string[] GetUsers(string testValue)
+public IEnumerable<User> GetUsers()
 {
-    return ["user1","user2",testValue];
+    string sql = @"
+        SELECT [UserId],
+            [FirstName],
+            [LastName],
+            [Email],
+            [Gender],
+            [Active] 
+        FROM TutorialAppSchema.Users";
+
+     IEnumerable<User> users = _dapper.LoadData<User>(sql);
+return users;
 }
 }
