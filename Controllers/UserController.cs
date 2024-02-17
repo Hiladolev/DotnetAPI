@@ -39,7 +39,7 @@ return users;
 }
 [HttpGet("GetSingleUser/{UserId}")]
 
-public User GetSingleUser(int UserId)
+public User GetSingleUser(int userId)
 {
     string sql = @"
         SELECT [UserId],
@@ -49,7 +49,7 @@ public User GetSingleUser(int UserId)
             [Gender],
             [Active] 
             FROM TutorialAppSchema.Users 
-                WHERE UserId = " + UserId.ToString();
+                WHERE UserId = " + userId.ToString();
 
      User user = _dapper.LoadDataSingle<User>(sql);
 return user;
@@ -89,4 +89,16 @@ public IActionResult AddUser(UserToAddDto user)
         if(_dapper.ExecuteSql(sql)) return Ok();
             throw new Exception("Failed to add user");
             }
+
+            [HttpDelete("DeleteUser/{userId}")]
+            public IActionResult DeleteUser(int userId)
+            {
+                string sql = @"
+                DELETE FROM TutorialAppSchema.Users 
+                    WHERE UserId = " + userId.ToString();
+                Console.WriteLine(sql);
+                if(_dapper.ExecuteSql(sql)) return Ok();
+                    throw new Exception("Failed to delete user");
+            }
+
 }
