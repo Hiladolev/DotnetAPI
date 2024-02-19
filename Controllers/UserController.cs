@@ -149,4 +149,60 @@ public IActionResult AddUserSalary(UserSalary userSalary)
                 if(_dapper.ExecuteSql(sql)) return Ok();
                     throw new Exception("Failed to delete user salary");
             }
+
+            //UserJobInfo
+            [HttpGet("GetUserJobInfo/{userId}")]
+public UserJobInfo GetUserJobInfo(int userId)
+{
+    string sql = @"
+        SELECT [UserId],
+                [JobTitle],
+                [Department] 
+                FROM TutorialAppSchema.UserJobInfo 
+                WHERE UserId = " + userId.ToString();
+
+     UserJobInfo userJobInfo = _dapper.LoadDataSingle<UserJobInfo>(sql);
+return userJobInfo;
+}
+
+[HttpPut("EditUserJobInfo")]
+public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
+{
+    string sql = @"
+    UPDATE TutorialAppSchema.UserJobInfo
+        SET [JobTitle] = '" + userJobInfo.JobTitle +
+        "', [Department] = '" + userJobInfo.Department + 
+        "' WHERE UserId = " + userJobInfo.UserId;
+        Console.WriteLine(sql);
+        if(_dapper.ExecuteSql(sql)) return Ok();
+            throw new Exception("Failed to update user job info");
+}
+
+[HttpPost("AddUserJobInfo")]
+public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
+{
+     string sql = @"INSERT INTO TutorialAppSchema.UserJobInfo 
+            ([UserId],
+            [JobTitle],
+            [Department]
+            ) VALUES (
+        '" + userJobInfo.UserId + 
+        "','" + userJobInfo.JobTitle +
+        "','" + userJobInfo.Department +  "')";
+     Console.WriteLine(sql);
+        if(_dapper.ExecuteSql(sql)) return Ok();
+            throw new Exception("Failed to add user job info");
+            }
+
+            [HttpDelete("DeleteUserJobInfo/{userId}")]
+            public IActionResult DeleteUserJobInfo(int userId)
+            {
+                string sql = @"
+                DELETE FROM TutorialAppSchema.UserJobInfo 
+                    WHERE UserId = " + userId.ToString();
+                Console.WriteLine(sql);
+                if(_dapper.ExecuteSql(sql)) return Ok();
+                    throw new Exception("Failed to delete user job info");
+            }
+
 }
