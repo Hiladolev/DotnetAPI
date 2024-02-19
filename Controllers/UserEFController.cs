@@ -23,7 +23,7 @@ public IEnumerable<User> GetUsers()
      IEnumerable<User> users = _entityFramework.Users.ToList();
 return users;
 }
-[HttpGet("GetSingleUser/{UserId}")]
+[HttpGet("GetSingleUser/{userId}")]
 
 public User GetSingleUser(int userId)
 {
