@@ -16,7 +16,6 @@ namespace DotnetAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // base.OnModelCreating(modelBuilder);
             modelBuilder.HasDefaultSchema("TutorialAppSchema");
         }
     }
