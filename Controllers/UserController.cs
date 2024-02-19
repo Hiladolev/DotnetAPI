@@ -37,7 +37,7 @@ public IEnumerable<User> GetUsers()
      IEnumerable<User> users = _dapper.LoadData<User>(sql);
 return users;
 }
-[HttpGet("GetSingleUser/{UserId}")]
+[HttpGet("GetSingleUser/{userId}")]
 
 public User GetSingleUser(int userId)
 {
@@ -101,4 +101,52 @@ public IActionResult AddUser(UserToAddDto user)
                     throw new Exception("Failed to delete user");
             }
 
+//UserSalary
+[HttpGet("GetUserSalary/{userId}")]
+public UserSalary GetUserSalary(int userId)
+{
+    string sql = @"
+        SELECT [UserId],
+               [Salary] 
+                FROM TutorialAppSchema.UserSalary 
+                WHERE UserId = " + userId.ToString();
+
+     UserSalary userSalary = _dapper.LoadDataSingle<UserSalary>(sql);
+return userSalary;
+}
+
+[HttpPut("EditUserSalary")]
+public IActionResult EditUserSalary(UserSalary userSalary)
+{
+    string sql = @"
+    UPDATE TutorialAppSchema.UserSalary
+        SET [Salary] = '" + userSalary.Salary +
+        "' WHERE UserId = " + userSalary.UserId;
+        Console.WriteLine(sql);
+        if(_dapper.ExecuteSql(sql)) return Ok();
+            throw new Exception("Failed to update user salary");
+}
+
+[HttpPost("AddUserSalary")]
+public IActionResult AddUserSalary(UserSalary userSalary)
+{
+     string sql = @"INSERT INTO TutorialAppSchema.UserSalary 
+            ([UserId],
+            [Salary]
+            ) VALUES (
+        " + userSalary.UserId +","+ userSalary.Salary + ")";
+        if(_dapper.ExecuteSql(sql)) return Ok();
+            throw new Exception("Failed to add user salary");
+            }
+
+            [HttpDelete("DeleteUserSalary/{userId}")]
+            public IActionResult DeleteUserSalary(int userId)
+            {
+                string sql = @"
+                DELETE FROM TutorialAppSchema.UserSalary 
+                    WHERE UserId = " + userId.ToString();
+                Console.WriteLine(sql);
+                if(_dapper.ExecuteSql(sql)) return Ok();
+                    throw new Exception("Failed to delete user salary");
+            }
 }
