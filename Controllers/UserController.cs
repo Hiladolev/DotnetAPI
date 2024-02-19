@@ -186,8 +186,8 @@ public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
             [JobTitle],
             [Department]
             ) VALUES (
-        '" + userJobInfo.UserId + 
-        "','" + userJobInfo.JobTitle +
+        " + userJobInfo.UserId + 
+        ",'" + userJobInfo.JobTitle +
         "','" + userJobInfo.Department +  "')";
      Console.WriteLine(sql);
         if(_dapper.ExecuteSql(sql)) return Ok();
