@@ -17,6 +17,7 @@ namespace DotnetAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("TutorialAppSchema");
+            modelBuilder.Entity<User>().ToTable("Users","TutorialAppSchema").HasKey(user=>user.UserId);
         }
     }
 }
