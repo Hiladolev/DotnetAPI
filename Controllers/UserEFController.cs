@@ -45,7 +45,7 @@ public IActionResult EditUser(User user)
         userDb.Email = user.Email;
         userDb.FirstName = user.FirstName;
         userDb.LastName = user.LastName;
-        if(_entityFramework.SavedChanges() > 0)
+        if(_entityFramework.SaveChanges() > 0)
         {
             return Ok();
         }
@@ -57,20 +57,19 @@ public IActionResult EditUser(User user)
 [HttpPost("AddUser")]
 public IActionResult AddUser(UserToAddDto user)
 {
-     string sql = @"INSERT INTO TutorialAppSchema.Users 
-            ([FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            []
-            ) VALUES (
-        '" + user.FirstName + 
-        "','" + user.LastName +
-        "','" + user.Email + 
-        "','" + user.Gender +
-        "','" + user. + "')";
-        Console.WriteLine(sql);
-        if(_dapper.ExecuteSql(sql)) return Ok();
+        User userDb = new User
+        {
+            Active = user.Active,
+            Gender = user.Gender,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName
+        };
+        _entityFramework.Add(userDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
             throw new Exception("Failed to add user");
             }
 
