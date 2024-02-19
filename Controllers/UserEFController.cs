@@ -143,4 +143,63 @@ public IActionResult AddUserSalary(UserSalary userSalary)
      }
      throw new Exception("Failed to get user");
             }
+
+            //UserJobInfo
+[HttpGet("GetJobInfo/{userId}")]
+
+public UserJobInfo GetJobInfo(int userId)
+{
+     UserJobInfo? userJobInfo = _entityFramework.UserJobInfo.Where(user=>user.UserId == userId).FirstOrDefault<UserJobInfo>();
+     if(userJobInfo != null)
+     {
+        return userJobInfo;
+     }
+     throw new Exception("Failed to get user job info");
+}
+
+[HttpPut("EditUserJobInfo")]
+public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
+{
+     UserJobInfo? jobInfoDb = _entityFramework.UserJobInfo.Where(u=>u.UserId == userJobInfo.UserId).FirstOrDefault<UserJobInfo>();
+     if(jobInfoDb != null)
+     {
+        jobInfoDb.JobTitle = userJobInfo.JobTitle;
+        jobInfoDb.Department = userJobInfo.Department;
+        if(_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+            throw new Exception("Failed to update user job info");
+     }
+     throw new Exception("Failed to get user job info");
+}
+
+
+[HttpPost("AddUserJobInfo")]
+public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
+{
+        UserJobInfo userJobInfoDb = _mapper.Map<UserJobInfo>(userJobInfo);
+        _entityFramework.Add(userJobInfoDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+            throw new Exception("Failed to add user job info");
+            }
+
+                        [HttpDelete("DeleteUserJobInfo/{userId}")]
+            public IActionResult DeleteUserJobInfo(int userId)
+            {
+     UserJobInfo? userJobInfoDb = _entityFramework.UserJobInfo.Where(u=>u.UserId == userId).FirstOrDefault<UserJobInfo>();
+     if(userJobInfoDb != null)
+     {
+        _entityFramework.UserJobInfo.Remove(userJobInfoDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+        throw new Exception("Failed to delete user job info");
+     }
+     throw new Exception("Failed to get user job info");
+            }
 }
