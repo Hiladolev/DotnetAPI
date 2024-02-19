@@ -30,23 +30,28 @@ public User GetSingleUser(int userId)
      User? user = _entityFramework.Users.Where(user=>user.UserId == userId).FirstOrDefault<User>();
      if(user != null)
      {
-return user;
-     }throw new Exception("Failed to get user");
+        return user;
+     }
+     throw new Exception("Failed to get user");
 }
 [HttpPut("EditUser")]
 public IActionResult EditUser(User user)
 {
-    string sql = @"
-    UPDATE TutorialAppSchema.Users
-        SET [FirstName] = '" + user.FirstName +
-        "', [LastName] = '" + user.LastName +
-        "', [Email] = '" + user.Email + 
-        "', [Gender] = '" + user.Gender +
-        "', [Active] = '" + user.Active + 
-        "' WHERE UserId = " + user.UserId;
-        Console.WriteLine(sql);
-        if(_dapper.ExecuteSql(sql)) return Ok();
+     User? userDb = _entityFramework.Users.Where(u=>u.UserId == user.UserId).FirstOrDefault<User>();
+     if(userDb != null)
+     {
+        userDb.Active = user.Active;
+        userDb.Gender = user.Gender;
+        userDb.Email = user.Email;
+        userDb.FirstName = user.FirstName;
+        userDb.LastName = user.LastName;
+        if(_entityFramework.SavedChanges() > 0)
+        {
+            return Ok();
+        }
             throw new Exception("Failed to update user");
+     }
+     throw new Exception("Failed to get user");
 }
 
 [HttpPost("AddUser")]
@@ -57,13 +62,13 @@ public IActionResult AddUser(UserToAddDto user)
             [LastName],
             [Email],
             [Gender],
-            [Active]
+            []
             ) VALUES (
         '" + user.FirstName + 
         "','" + user.LastName +
         "','" + user.Email + 
         "','" + user.Gender +
-        "','" + user.Active + "')";
+        "','" + user. + "')";
         Console.WriteLine(sql);
         if(_dapper.ExecuteSql(sql)) return Ok();
             throw new Exception("Failed to add user");
