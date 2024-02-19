@@ -18,6 +18,8 @@ namespace DotnetAPI.Data
         {
             modelBuilder.HasDefaultSchema("TutorialAppSchema");
             modelBuilder.Entity<User>().ToTable("Users","TutorialAppSchema").HasKey(user=>user.UserId);
+            modelBuilder.Entity<UserSalary>().HasKey(user=>user.UserId);
+            modelBuilder.Entity<UserJobInfo>().HasKey(user=>user.UserId);
         }
     }
 }
