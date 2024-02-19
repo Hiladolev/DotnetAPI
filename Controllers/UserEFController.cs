@@ -87,4 +87,60 @@ public IActionResult AddUser(UserToAddDto user)
      throw new Exception("Failed to get user");
             }
 
+//UserSalary
+[HttpGet("GetUserSalary/{userId}")]
+
+public UserSalary GetUserSalary(int userId)
+{
+     UserSalary? userSalary = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
+     if(userSalary != null)
+     {
+        return userSalary;
+     }
+     throw new Exception("Failed to get user salary");
+}
+
+[HttpPut("EditUserSalary")]
+public IActionResult EditUserSalary(UserSalary userSalary)
+{
+     UserSalary? userSalaryDb = _entityFramework.UserSalary.Where(u=>u.UserId == userSalary.UserId).FirstOrDefault<UserSalary>();
+     if(userSalaryDb != null)
+     {
+        userSalaryDb.Salary = userSalary.Salary;
+        if(_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+            throw new Exception("Failed to update user salary");
+     }
+     throw new Exception("Failed to get user salary");
+}
+
+[HttpPost("AddUserSalary")]
+public IActionResult AddUserSalary(UserSalary userSalary)
+{
+        UserSalary userSalaryDb = _mapper.Map<UserSalary>(userSalary);
+        _entityFramework.Add(userSalaryDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+            throw new Exception("Failed to add user salary");
+            }
+
+            [HttpDelete("DeleteUserSalary/{userId}")]
+            public IActionResult DeleteUserSalary(int userId)
+            {
+     UserSalary? userSalaryDb = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
+     if(userSalaryDb != null)
+     {
+        _entityFramework.UserSalary.Remove(userSalaryDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+        throw new Exception("Failed to delete user");
+     }
+     throw new Exception("Failed to get user");
+            }
 }
