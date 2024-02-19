@@ -76,12 +76,17 @@ public IActionResult AddUser(UserToAddDto user)
             [HttpDelete("DeleteUser/{userId}")]
             public IActionResult DeleteUser(int userId)
             {
-                string sql = @"
-                DELETE FROM TutorialAppSchema.Users 
-                    WHERE UserId = " + userId.ToString();
-                Console.WriteLine(sql);
-                if(_dapper.ExecuteSql(sql)) return Ok();
-                    throw new Exception("Failed to delete user");
+     User? userDb = _entityFramework.Users.Where(u=>u.UserId == userId).FirstOrDefault<User>();
+     if(userDb != null)
+     {
+        _entityFramework.Users.Remove(userDb);
+        if (_entityFramework.SaveChanges() > 0)
+        {
+            return Ok();
+        }
+        throw new Exception("Failed to delete user");
+     }
+     throw new Exception("Failed to get user");
             }
 
 }
