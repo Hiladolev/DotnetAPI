@@ -27,24 +27,18 @@ cfg.CreateMap<UserToAddDto,User>()
 
 public IEnumerable<User> GetUsers()
 {
-     IEnumerable<User> users = _entityFramework.Users.ToList();
-return users;
+return _userRepository.GetUsers();
 }
 [HttpGet("GetSingleUser/{userId}")]
 
 public User GetSingleUser(int userId)
 {
-     User? user = _entityFramework.Users.Where(user=>user.UserId == userId).FirstOrDefault<User>();
-     if(user != null)
-     {
-        return user;
-     }
-     throw new Exception("Failed to get user");
+return _userRepository.GetSingleUser(userId);
 }
 [HttpPut("EditUser")]
 public IActionResult EditUser(User user)
 {
-     User? userDb = _entityFramework.Users.Where(u=>u.UserId == user.UserId).FirstOrDefault<User>();
+     User? userDb = _userRepository.GetSingleUser(user.UserId);
      if(userDb != null)
      {
         userDb.Active = user.Active;
@@ -76,7 +70,7 @@ public IActionResult AddUser(UserToAddDto user)
             [HttpDelete("DeleteUser/{userId}")]
             public IActionResult DeleteUser(int userId)
             {
-     User? userDb = _entityFramework.Users.Where(u=>u.UserId == userId).FirstOrDefault<User>();
+     User? userDb = _userRepository.GetSingleUser(userId);
      if(userDb != null)
      {
         _userRepository.RemoveEntity<User>(userDb);
@@ -94,18 +88,13 @@ public IActionResult AddUser(UserToAddDto user)
 
 public UserSalary GetUserSalary(int userId)
 {
-     UserSalary? userSalary = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
-     if(userSalary != null)
-     {
-        return userSalary;
-     }
-     throw new Exception("Failed to get user salary");
+return _userRepository.GetUserSalary(userId);
 }
 
 [HttpPut("EditUserSalary")]
 public IActionResult EditUserSalary(UserSalary userSalary)
 {
-     UserSalary? userSalaryDb = _entityFramework.UserSalary.Where(u=>u.UserId == userSalary.UserId).FirstOrDefault<UserSalary>();
+     UserSalary? userSalaryDb = _userRepository.GetUserSalary(userSalary.UserId);
      if(userSalaryDb != null)
      {
         userSalaryDb.Salary = userSalary.Salary;
@@ -133,7 +122,8 @@ public IActionResult AddUserSalary(UserSalary userSalary)
             [HttpDelete("DeleteUserSalary/{userId}")]
             public IActionResult DeleteUserSalary(int userId)
             {
-     UserSalary? userSalaryDb = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
+     UserSalary? userSalaryDb = _userRepository.GetUserSalary(userId);
+     if(userSalaryDb != null)
      if(userSalaryDb != null)
      {
        _userRepository.RemoveEntity<UserSalary>(userSalaryDb);
@@ -151,18 +141,13 @@ public IActionResult AddUserSalary(UserSalary userSalary)
 
 public UserJobInfo GetJobInfo(int userId)
 {
-     UserJobInfo? userJobInfo = _entityFramework.UserJobInfo.Where(user=>user.UserId == userId).FirstOrDefault<UserJobInfo>();
-     if(userJobInfo != null)
-     {
-        return userJobInfo;
-     }
-     throw new Exception("Failed to get user job info");
+return _userRepository.GetJobInfo(userId);
 }
 
 [HttpPut("EditUserJobInfo")]
 public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
 {
-     UserJobInfo? jobInfoDb = _entityFramework.UserJobInfo.Where(u=>u.UserId == userJobInfo.UserId).FirstOrDefault<UserJobInfo>();
+     UserJobInfo? jobInfoDb = _userRepository.GetJobInfo(userJobInfo.UserId);
      if(jobInfoDb != null)
      {
         jobInfoDb.JobTitle = userJobInfo.JobTitle;
@@ -192,7 +177,7 @@ public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
                         [HttpDelete("DeleteUserJobInfo/{userId}")]
             public IActionResult DeleteUserJobInfo(int userId)
             {
-     UserJobInfo? userJobInfoDb = _entityFramework.UserJobInfo.Where(u=>u.UserId == userId).FirstOrDefault<UserJobInfo>();
+     UserJobInfo? userJobInfoDb = _userRepository.GetJobInfo(userId);
      if(userJobInfoDb != null)
      {
        _userRepository.RemoveEntity<UserJobInfo>(userJobInfoDb);

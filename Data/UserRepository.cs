@@ -1,3 +1,5 @@
+using DotnetAPI.Models;
+
 namespace DotnetAPI.Data
 {
     public class UserRepository : IUserRepository
@@ -27,6 +29,38 @@ namespace DotnetAPI.Data
             {
                 _entityFramework.Remove(entityToRemove);
             }
+        }
+        public IEnumerable<User> GetUsers()
+        {
+            IEnumerable<User> users = _entityFramework.Users.ToList<User>();
+            return users;
+        }
+        public User GetSingleUser(int userId)
+        {
+            User? user = _entityFramework.Users.Where(user=>user.UserId == userId).FirstOrDefault<User>();
+            if(user != null)
+            {
+                return user;
+            }
+            throw new Exception("Failed to get user");
+        }
+        public UserSalary GetUserSalary(int userId)
+        {
+            UserSalary? userSalary = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
+            if(userSalary != null)
+            {
+                return userSalary;
+            }
+            throw new Exception("Failed to get user salary");
+        }
+        public UserJobInfo GetJobInfo(int userId)
+        {
+            UserJobInfo? userJobInfo = _entityFramework.UserJobInfo.Where(user=>user.UserId == userId).FirstOrDefault<UserJobInfo>();
+            if(userJobInfo != null)
+            {
+                return userJobInfo;
+            }
+            throw new Exception("Failed to get user job info");
         }
     }
 }
