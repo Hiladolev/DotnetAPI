@@ -12,10 +12,12 @@ namespace DotnetAPI.Controllers;
 public class UserEFController : ControllerBase
 {
 DataContextEF _entityFramework;
+IUserRepository _userRepository;
 IMapper _mapper;
-public UserEFController(IConfiguration config)
+public UserEFController(IConfiguration config, IUserRepository userRepository)
 {
 _entityFramework = new DataContextEF(config);
+_userRepository = userRepository;
 _mapper = new Mapper(new MapperConfiguration(cfg =>
 cfg.CreateMap<UserToAddDto,User>()
 ));
@@ -50,7 +52,7 @@ public IActionResult EditUser(User user)
         userDb.Email = user.Email;
         userDb.FirstName = user.FirstName;
         userDb.LastName = user.LastName;
-        if(_entityFramework.SaveChanges() > 0)
+        if(_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -63,8 +65,8 @@ public IActionResult EditUser(User user)
 public IActionResult AddUser(UserToAddDto user)
 {
         User userDb = _mapper.Map<User>(user);
-        _entityFramework.Add(userDb);
-        if (_entityFramework.SaveChanges() > 0)
+        _userRepository.AddEntity<User>(userDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -77,8 +79,8 @@ public IActionResult AddUser(UserToAddDto user)
      User? userDb = _entityFramework.Users.Where(u=>u.UserId == userId).FirstOrDefault<User>();
      if(userDb != null)
      {
-        _entityFramework.Users.Remove(userDb);
-        if (_entityFramework.SaveChanges() > 0)
+        _userRepository.RemoveEntity<User>(userDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -107,7 +109,7 @@ public IActionResult EditUserSalary(UserSalary userSalary)
      if(userSalaryDb != null)
      {
         userSalaryDb.Salary = userSalary.Salary;
-        if(_entityFramework.SaveChanges() > 0)
+        if(_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -120,8 +122,8 @@ public IActionResult EditUserSalary(UserSalary userSalary)
 public IActionResult AddUserSalary(UserSalary userSalary)
 {
         UserSalary userSalaryDb = _mapper.Map<UserSalary>(userSalary);
-        _entityFramework.Add(userSalaryDb);
-        if (_entityFramework.SaveChanges() > 0)
+       _userRepository.AddEntity<UserSalary>(userSalaryDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -134,8 +136,8 @@ public IActionResult AddUserSalary(UserSalary userSalary)
      UserSalary? userSalaryDb = _entityFramework.UserSalary.Where(u=>u.UserId == userId).FirstOrDefault<UserSalary>();
      if(userSalaryDb != null)
      {
-        _entityFramework.UserSalary.Remove(userSalaryDb);
-        if (_entityFramework.SaveChanges() > 0)
+       _userRepository.RemoveEntity<UserSalary>(userSalaryDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -165,7 +167,7 @@ public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
      {
         jobInfoDb.JobTitle = userJobInfo.JobTitle;
         jobInfoDb.Department = userJobInfo.Department;
-        if(_entityFramework.SaveChanges() > 0)
+        if(_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -179,8 +181,8 @@ public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
 public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
 {
         UserJobInfo userJobInfoDb = _mapper.Map<UserJobInfo>(userJobInfo);
-        _entityFramework.Add(userJobInfoDb);
-        if (_entityFramework.SaveChanges() > 0)
+       _userRepository.AddEntity<UserJobInfo>(userJobInfoDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
@@ -193,8 +195,8 @@ public IActionResult AddUserJobInfo(UserJobInfo userJobInfo)
      UserJobInfo? userJobInfoDb = _entityFramework.UserJobInfo.Where(u=>u.UserId == userId).FirstOrDefault<UserJobInfo>();
      if(userJobInfoDb != null)
      {
-        _entityFramework.UserJobInfo.Remove(userJobInfoDb);
-        if (_entityFramework.SaveChanges() > 0)
+       _userRepository.RemoveEntity<UserJobInfo>(userJobInfoDb);
+        if (_userRepository.SaveChanges())
         {
             return Ok();
         }
