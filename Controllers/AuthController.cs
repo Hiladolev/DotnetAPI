@@ -1,4 +1,5 @@
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -117,6 +118,9 @@ namespace DotnetAPI
               SigningCredentials = credentials,
               Expires = DateTime.Now.AddDays(1)  
             };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            SecurityToken token = tokenHandler.CreateToken(descriptor);
         }
     }
 }
