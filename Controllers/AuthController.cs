@@ -108,6 +108,15 @@ namespace DotnetAPI
 
             SymmetricSecurityKey tokenKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(tokenKeyString ?? ""));
+
+              SigningCredentials credentials = new SigningCredentials(tokenKey,SecurityAlgorithms.HmacSha512Signature);  
+        
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor()
+            {
+              Subject = new ClaimsIdentity(claims),
+              SigningCredentials = credentials,
+              Expires = DateTime.Now.AddDays(1)  
+            };
         }
     }
 }
