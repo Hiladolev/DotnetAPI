@@ -45,7 +45,22 @@ namespace DotnetAPI
                 passwordHashParameter.Value = passwordHash;
             sqlParameters.Add(passwordSaltParameter);
             sqlParameters.Add(passwordHashParameter);
-                if(_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters)) return Ok();
+                if(_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters)) 
+                {
+                    string sqlAddUser = @"
+                        INSERT INTO TutorialAppSchema.Users 
+                            ([FirstName],
+                            [LastName],
+                            [Email],
+                            [Gender],
+                            [Active]
+                            ) VALUES ('" + userForRegistration.FirstName + 
+                        "','" + userForRegistration.LastName +
+                        "','" + userForRegistration.Email + 
+                        "','" + userForRegistration.Gender +
+                        "', 1)";
+                return Ok();
+                }
                 throw new Exception("Failed to register user");
             }
                 throw new Exception("User password and password confirmation don't match");
