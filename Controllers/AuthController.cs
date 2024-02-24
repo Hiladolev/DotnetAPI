@@ -1,4 +1,5 @@
 using System.Data;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using DotnetAPI.Data;
@@ -6,6 +7,7 @@ using DotnetAPI.Dtos;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DotnetAPI
 {
@@ -95,6 +97,17 @@ namespace DotnetAPI
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8
             );
+        }
+        private string CreateToken(int userId)
+        {
+            Claim[] claims = [
+                new Claim("userId",userId.ToString())
+            ];
+
+        string? tokenKeyString = _config.GetSection("AppSettings:TokenKey").Value;
+
+            SymmetricSecurityKey tokenKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(tokenKeyString ?? ""));
         }
     }
 }
