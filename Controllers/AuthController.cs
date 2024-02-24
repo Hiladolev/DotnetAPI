@@ -59,7 +59,8 @@ namespace DotnetAPI
                         "','" + userForRegistration.Email + 
                         "','" + userForRegistration.Gender +
                         "', 1)";
-                return Ok();
+                        if(_dapper.ExecuteSql(sqlAddUser))return Ok();
+                        throw new Exception("Failed to add user");
                 }
                 throw new Exception("Failed to register user");
             }
