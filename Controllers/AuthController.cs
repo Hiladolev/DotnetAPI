@@ -121,6 +121,8 @@ namespace DotnetAPI
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
             SecurityToken token = tokenHandler.CreateToken(descriptor);
+        
+            return tokenHandler.WriteToken(token);
         }
     }
 }
