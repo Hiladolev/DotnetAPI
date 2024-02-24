@@ -86,7 +86,13 @@ namespace DotnetAPI
                     return StatusCode(401, "Incorrect password");
                 }
             }
-            return Ok();
+            string sqlGetUserId = @"
+            SELECT UserId
+            FROM TutorialAppSchema.Users WHERE email = '" + userForLogin.Email + "'";  
+            int userId = _dapper.LoadDataSingle<int>(sqlGetUserId);
+            return Ok(new Dictionary<string, string> {
+                {"token", CreateToken(userId)}
+            });
         }
         private byte[] GetPasswordHash(string password, byte[] passwordSalt)
         {
