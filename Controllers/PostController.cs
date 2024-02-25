@@ -36,6 +36,17 @@ namespace DotnetAPI.Controllers
         [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostId = " + postId.ToString(); 
         return _dapper.LoadDataSingle<Post>(sql);
     }
+    [HttpGet("PostsByUser/{userId}")]
+    public IEnumerable<Post> PostsByUser(int userId)
+    {
+        string sql = @"Select [PostId],
+        [UserId],
+        [PostTitle],
+        [PostContent],
+        [PostCreated],
+        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostId = " + userId.ToString(); 
+        return _dapper.LoadData<Post>(sql);
+    }
     [HttpGet("MyPosts")]
     public IEnumerable<Post> MyPosts()
     {
