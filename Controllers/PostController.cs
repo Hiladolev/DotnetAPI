@@ -90,7 +90,8 @@ namespace DotnetAPI.Controllers
     {
         string sql = @"
         DELETE FROM TutorialAppSchema.Posts
-         WHERE PostId = " + postId.ToString();
+        WHERE PostId = " + postId.ToString() + 
+            "AND UserId = " + User.FindFirst("UserId")?.Value;
         if(_dapper.ExecuteSql(sql)) return StatusCode(204);
         throw new Exception("Failed to delete post");
     }
