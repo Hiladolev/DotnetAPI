@@ -1,4 +1,5 @@
 using DotnetAPI.Data;
+using DotnetAPI.Dtos;
 using DotnetAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,20 @@ namespace DotnetAPI.Controllers
         [PostCreated],
         [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + User.FindFirst("UserId")?.Value; 
         return _dapper.LoadData<Post>(sql);
+    }
+    [HttpPost("Post")]
+    public IActionResult Post(PostToAddDto post)
+    {
+        string sql = @"INSERT INTO TutorialAppSchema.Posts([UserId],
+                [PostTitle],
+                [PostContent],
+                [PostCreated],
+                [PostUpdated]) VALUES( '" + User.FindFirst("UserId")?.Value +
+                "', '" + post.PostTitle + 
+                "', '" + post.PostContent + 
+                "', GETDATE(), GETDATE() )";
+                if(_dapper.ExecuteSql(sql)) return StatusCode(201);
+                throw new Exception("Failed to create new post");
     }
     } 
 }
