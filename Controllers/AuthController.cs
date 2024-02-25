@@ -23,6 +23,8 @@ namespace DotnetAPI
             _dapper = new DataContextDapper(config);
             _config = config;
         }
+
+        [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(UserForRegistrationDto userForRegistration)
         {
@@ -72,6 +74,8 @@ namespace DotnetAPI
                 throw new Exception("User password and password confirmation don't match");
 
         }
+
+        [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login(UserForLoginDto userForLogin)
         {
@@ -95,6 +99,18 @@ namespace DotnetAPI
             return Ok(new Dictionary<string, string> {
                 {"token", CreateToken(userId)}
             });
+        }
+
+        [HttpGet("RefreshToken")]
+        public string RefreshToken()
+        {
+            string sqlGetUserId = @"
+            SELECT UserId
+            FROM TutorialAppSchema.Users WHERE UserId = '" + User.FindFirst("userId")?.Value + "'"; 
+
+            int userId = _dapper.LoadDataSingle<int>(sqlGetUserId);
+            
+            return CreateToken(userId); 
         }
         private byte[] GetPasswordHash(string password, byte[] passwordSalt)
         {
