@@ -101,7 +101,7 @@ namespace DotnetAPI
         }
 
         [HttpGet("RefreshToken")]
-                public string RefreshToken()
+        public string RefreshToken()
         {
             string sqlGetUserId = @"
             SELECT UserId
