@@ -21,8 +21,30 @@ namespace DotnetAPI.Controllers
     {
         string sql = @"SELECT * FROM TutorialAppSchema.Posts";
 
-        return  _dapper.LoadData<Post>(sql);
+        return _dapper.LoadData<Post>(sql);
 
+    }
+    [HttpGet("PostSingle/{postId}")]
+    public Post PostSingle(int postId)
+    {
+        string sql = @"Select [PostId],
+        [UserId],
+        [PostTitle],
+        [PostContent],
+        [PostCreated],
+        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostId = " + postId.ToString(); 
+        return _dapper.LoadDataSingle<Post>(sql);
+    }
+    [HttpGet("MyPosts")]
+    public IEnumerable<Post> MyPosts()
+    {
+        string sql = @"Select [PostId],
+        [UserId],
+        [PostTitle],
+        [PostContent],
+        [PostCreated],
+        [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + User.FindFirst("UserId")?.Value; 
+        return _dapper.LoadData<Post>(sql);
     }
     } 
 }
