@@ -74,7 +74,7 @@ namespace DotnetAPI.Controllers
         if(_dapper.ExecuteSql(sql)) return StatusCode(200);
         throw new Exception("Failed to edit post");
     }
-    [HttpPut("Post/{postId}")]
+    [HttpDelete("Post/{postId}")]
     public IActionResult DeletePost(int postId)
     {
         string sql = @"
