@@ -61,5 +61,18 @@ namespace DotnetAPI.Controllers
                 if(_dapper.ExecuteSql(sql)) return StatusCode(201);
                 throw new Exception("Failed to create new post");
     }
+    [HttpPut("Post")]
+    public IActionResult EditPost(PostToEditDto post)
+    {
+        string sql = @"
+        UPDATE TutorialAppSchema.Posts
+            SET [PostTitle] = '" + post.PostTitle +
+            "', [PostContent] = '" + post.PostContent +
+            @"', [PostUpdated] = GETDATE()
+            WHERE PostId = " + post.PostId.ToString() + 
+            "AND UserId = " + User.FindFirst("UserId")?.Value;
+        if(_dapper.ExecuteSql(sql)) return StatusCode(200);
+        throw new Exception("Failed to edit new post");
+    }
     } 
 }
