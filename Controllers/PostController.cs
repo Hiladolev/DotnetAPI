@@ -44,7 +44,7 @@ namespace DotnetAPI.Controllers
         [PostTitle],
         [PostContent],
         [PostCreated],
-        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostId = " + userId.ToString(); 
+        [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + userId.ToString(); 
         return _dapper.LoadData<Post>(sql);
     }
     [HttpGet("MyPosts")]
