@@ -27,6 +27,9 @@ builder.Services.AddCors((options) =>
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,8 +44,11 @@ else{
     app.UseHttpsRedirection();
 }
 
-app.MapControllers();
+app.UseAuthorization();
 
+app.UseAuthentication();
+
+app.MapControllers();
 
 app.Run();
 
