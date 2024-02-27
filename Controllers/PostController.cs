@@ -58,6 +58,18 @@ namespace DotnetAPI.Controllers
         [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + User.FindFirst("UserId")?.Value; 
         return _dapper.LoadData<Post>(sql);
     }
+    [HttpGet("PostsBySearch/{searchParam}")]
+    public IEnumerable<Post> PostsBySearch(string searchParam)
+    {
+        string sql = @"Select [PostId],
+        [UserId],
+        [PostTitle],
+        [PostContent],
+        [PostCreated],
+        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostTitle LIKE '%" + searchParam + "%'" +
+         " OR PostContent LIKE '%" + searchParam + "%'";
+        return _dapper.LoadData<Post>(sql);
+    }
     [HttpPost("Post")]
     public IActionResult Post(PostToAddDto post)
     {
