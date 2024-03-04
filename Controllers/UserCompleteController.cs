@@ -42,17 +42,18 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
     return users;
 }
 [HttpPut("EditUser")]
-public IActionResult EditUser(User user)
+public IActionResult EditUser(UserComplete user)
 {
-    string sql = @"
-    UPDATE TutorialAppSchema.Users
-        SET [FirstName] = '" + user.FirstName +
-        "', [LastName] = '" + user.LastName +
-        "', [Email] = '" + user.Email + 
-        "', [Gender] = '" + user.Gender +
-        "', [Active] = '" + user.Active + 
-        "' WHERE UserId = " + user.UserId;
-        Console.WriteLine(sql);
+    string sql = @"EXEC TutorialAppSchema.spUser_Upsert
+    @FirstName = '" + user.FirstName + 
+    "',@LastName = '" + user.LastName + 
+    "', @Email = '" + user.Email + 
+    "', @Gender = '" + user.Gender + 
+    "', @JobTitle = '" + user.JobTitle + 
+    "', @Department = '" + user.Department + 
+    "', @Salary = '" + user.Salary + 
+    "', @Active = '" + user.Active + 
+    "', @UserId = " + user.UserId ;
         if(_dapper.ExecuteSql(sql)) return Ok();
             throw new Exception("Failed to update user");
 }
