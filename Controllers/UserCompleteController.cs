@@ -25,7 +25,11 @@ public DateTime TestConnection()
 
 public IEnumerable<UserComplete> GetUsers(int userId)
 {
-    string sql = @"EXEC TutorialAppSchema.spUsers_Get @UserId = " + userId.ToString();
+    string sql = @"EXEC TutorialAppSchema.spUsers_Get";
+if(userId != 0)
+{
+sql += "@UserId =" + userId.ToString();
+}
     IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
     return users;
 }
