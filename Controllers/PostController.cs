@@ -29,28 +29,7 @@ namespace DotnetAPI.Controllers
         return _dapper.LoadData<Post>(sql);
 
     }
-    [HttpGet("PostSingle/{postId}")]
-    public Post PostSingle(int postId)
-    {
-        string sql = @"Select [PostId],
-        [UserId],
-        [PostTitle],
-        [PostContent],
-        [PostCreated],
-        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostId = " + postId.ToString(); 
-        return _dapper.LoadDataSingle<Post>(sql);
-    }
-    [HttpGet("PostsByUser/{userId}")]
-    public IEnumerable<Post> PostsByUser(int userId)
-    {
-        string sql = @"Select [PostId],
-        [UserId],
-        [PostTitle],
-        [PostContent],
-        [PostCreated],
-        [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + userId.ToString(); 
-        return _dapper.LoadData<Post>(sql);
-    }
+
     [HttpGet("MyPosts")]
     public IEnumerable<Post> MyPosts()
     {
@@ -60,18 +39,6 @@ namespace DotnetAPI.Controllers
         [PostContent],
         [PostCreated],
         [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + User.FindFirst("UserId")?.Value; 
-        return _dapper.LoadData<Post>(sql);
-    }
-    [HttpGet("PostsBySearch/{searchParam}")]
-    public IEnumerable<Post> PostsBySearch(string searchParam)
-    {
-        string sql = @"Select [PostId],
-        [UserId],
-        [PostTitle],
-        [PostContent],
-        [PostCreated],
-        [PostUpdated] FROM TutorialAppSchema.Posts WHERE PostTitle LIKE '%" + searchParam + "%'" +
-         " OR PostContent LIKE '%" + searchParam + "%'";
         return _dapper.LoadData<Post>(sql);
     }
     [HttpPost("Post")]
