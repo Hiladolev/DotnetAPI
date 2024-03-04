@@ -21,21 +21,13 @@ public DateTime TestConnection()
 {
     return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
 }
-[HttpGet("GetUsers")]
+[HttpGet("GetUsers/{userId}")]
 
-public IEnumerable<User> GetUsers()
+public IEnumerable<UserComplete> GetUsers(int userId)
 {
-    string sql = @"
-        SELECT [UserId],
-            [FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            [Active] 
-        FROM TutorialAppSchema.Users";
-
-     IEnumerable<User> users = _dapper.LoadData<User>(sql);
-return users;
+    string sql = @"EXEC TutorialAppSchema.spUsers_Get @UserId = " + userId;
+    IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
+    return users;
 }
 [HttpGet("GetSingleUser/{userId}")]
 
