@@ -24,7 +24,7 @@ namespace DotnetAPI.Controllers
         string parameters = "";
         if(postId != 0) parameters += ", @PostId = " + postId.ToString();
         if(userId != 0) parameters += ", @UserId = " + userId.ToString();
-        if(searchParam != "None") parameters += ", @SearchValue = '" + searchParam + "'";
+        if(searchParam.ToLower() != "none") parameters += ", @SearchValue = '" + searchParam + "'";
         if(parameters.Length > 0)sql += parameters[1..];
         return _dapper.LoadData<Post>(sql);
 
