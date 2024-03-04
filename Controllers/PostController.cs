@@ -33,12 +33,8 @@ namespace DotnetAPI.Controllers
     [HttpGet("MyPosts")]
     public IEnumerable<Post> MyPosts()
     {
-        string sql = @"Select [PostId],
-        [UserId],
-        [PostTitle],
-        [PostContent],
-        [PostCreated],
-        [PostUpdated] FROM TutorialAppSchema.Posts WHERE UserId = " + User.FindFirst("UserId")?.Value; 
+        string sql = @"EXEC TutorialAppSchema.spPosts_Get @UserId = " + 
+        User.FindFirst("UserId")?.Value; 
         return _dapper.LoadData<Post>(sql);
     }
     [HttpPost("Post")]
