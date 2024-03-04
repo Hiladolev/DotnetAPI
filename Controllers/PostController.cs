@@ -18,14 +18,14 @@ namespace DotnetAPI.Controllers
         }
 
     [HttpGet("Posts/{postId}/{userId}/{searchParam}")]
-    public IEnumerable<Post> Posts(int postId, int userId, string searchParam = "None")
+    public IEnumerable<Post> Posts(int postId = 0, int userId = 0, string searchParam = "None")
     {
         string sql = @"EXEC TutorialAppSchema.spPosts_Get";
         string parameters = "";
         if(postId != 0) parameters += ", @PostId = " + postId.ToString();
         if(userId != 0) parameters += ", @UserId = " + userId.ToString();
         if(searchParam != "None") parameters += ", @SearchValue = '" + searchParam + "'";
-        sql += parameters[1..];
+        if(parameters.Length > 0)sql += parameters[1..];
         return _dapper.LoadData<Post>(sql);
 
     }
