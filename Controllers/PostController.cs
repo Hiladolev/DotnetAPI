@@ -37,32 +37,16 @@ namespace DotnetAPI.Controllers
         User.FindFirst("UserId")?.Value; 
         return _dapper.LoadData<Post>(sql);
     }
-    [HttpPost("Post")]
-    public IActionResult Post(PostToAddDto post)
+    [HttpPut("UpsertPost")]
+    public IActionResult UpsertPost(Post post)
     {
-        string sql = @"INSERT INTO TutorialAppSchema.Posts([UserId],
-                [PostTitle],
-                [PostContent],
-                [PostCreated],
-                [PostUpdated]) VALUES( '" + User.FindFirst("UserId")?.Value +
-                "', '" + post.PostTitle + 
-                "', '" + post.PostContent + 
-                "', GETDATE(), GETDATE() )";
-                if(_dapper.ExecuteSql(sql)) return StatusCode(201);
-                throw new Exception("Failed to create new post");
-    }
-    [HttpPut("Post")]
-    public IActionResult EditPost(PostToEditDto post)
-    {
-        string sql = @"
-        UPDATE TutorialAppSchema.Posts
-            SET [PostTitle] = '" + post.PostTitle +
-            "', [PostContent] = '" + post.PostContent +
-            @"', [PostUpdated] = GETDATE()
-            WHERE PostId = " + post.PostId.ToString() + 
-            "AND UserId = " + User.FindFirst("UserId")?.Value;
-        if(_dapper.ExecuteSql(sql)) return StatusCode(200);
-        throw new Exception("Failed to edit post");
+        string sql = @"EXEC TutorialAppSchema.spPosts_Upsert
+            @UserId = " + User.FindFirst("UserId")?.Value +
+            ", @PostTitle = '" + post.PostTitle +
+            "', @PostContent = '" + post.PostContent + "'";
+            if(post.PostId > 0) sql += ", @PostId = " + post.PostId;
+            if(_dapper.ExecuteSql(sql)) return StatusCode(200);
+            throw new Exception("Failed to edit post");
     }
     [HttpDelete("Post/{postId}")]
     public IActionResult DeletePost(int postId)
