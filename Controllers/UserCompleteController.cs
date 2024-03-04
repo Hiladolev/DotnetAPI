@@ -41,23 +41,6 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
     IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
     return users;
 }
-[HttpGet("GetSingleUser/{userId}")]
-
-public User GetSingleUser(int userId)
-{
-    string sql = @"
-        SELECT [UserId],
-            [FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            [Active] 
-            FROM TutorialAppSchema.Users 
-                WHERE UserId = " + userId.ToString();
-
-     User user = _dapper.LoadDataSingle<User>(sql);
-return user;
-}
 [HttpPut("EditUser")]
 public IActionResult EditUser(User user)
 {
@@ -106,19 +89,6 @@ public IActionResult AddUser(UserToAddDto user)
             }
 
 //UserSalary
-[HttpGet("GetUserSalary/{userId}")]
-public UserSalary GetUserSalary(int userId)
-{
-    string sql = @"
-        SELECT [UserId],
-               [Salary] 
-                FROM TutorialAppSchema.UserSalary 
-                WHERE UserId = " + userId.ToString();
-
-     UserSalary userSalary = _dapper.LoadDataSingle<UserSalary>(sql);
-return userSalary;
-}
-
 [HttpPut("EditUserSalary")]
 public IActionResult EditUserSalary(UserSalary userSalary)
 {
@@ -154,21 +124,7 @@ public IActionResult AddUserSalary(UserSalary userSalary)
                     throw new Exception("Failed to delete user salary");
             }
 
-            //UserJobInfo
-            [HttpGet("GetUserJobInfo/{userId}")]
-public UserJobInfo GetUserJobInfo(int userId)
-{
-    string sql = @"
-        SELECT [UserId],
-                [JobTitle],
-                [Department] 
-                FROM TutorialAppSchema.UserJobInfo 
-                WHERE UserId = " + userId.ToString();
-
-     UserJobInfo userJobInfo = _dapper.LoadDataSingle<UserJobInfo>(sql);
-return userJobInfo;
-}
-
+//UserJobInfo
 [HttpPut("EditUserJobInfo")]
 public IActionResult EditUserJobInfo(UserJobInfo userJobInfo)
 {
