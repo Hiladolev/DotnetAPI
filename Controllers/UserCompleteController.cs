@@ -58,41 +58,13 @@ public IActionResult UpsertUser(UserComplete user)
             throw new Exception("Failed to update user");
 }
 
-            [HttpDelete("DeleteUser/{userId}")]
-            public IActionResult DeleteUser(int userId)
-            {
-                string sql = @"
-                DELETE FROM TutorialAppSchema.Users 
-                    WHERE UserId = " + userId.ToString();
-                Console.WriteLine(sql);
-                if(_dapper.ExecuteSql(sql)) return Ok();
-                    throw new Exception("Failed to delete user");
-            }
-
-//UserSalary
-
-            [HttpDelete("DeleteUserSalary/{userId}")]
-            public IActionResult DeleteUserSalary(int userId)
-            {
-                string sql = @"
-                DELETE FROM TutorialAppSchema.UserSalary 
-                    WHERE UserId = " + userId.ToString();
-                Console.WriteLine(sql);
-                if(_dapper.ExecuteSql(sql)) return Ok();
-                    throw new Exception("Failed to delete user salary");
-            }
-
-//UserJobInfo
-
-            [HttpDelete("DeleteUserJobInfo/{userId}")]
-            public IActionResult DeleteUserJobInfo(int userId)
-            {
-                string sql = @"
-                DELETE FROM TutorialAppSchema.UserJobInfo 
-                    WHERE UserId = " + userId.ToString();
-                Console.WriteLine(sql);
-                if(_dapper.ExecuteSql(sql)) return Ok();
-                    throw new Exception("Failed to delete user job info");
-            }
-
+        [HttpDelete("DeleteUser/{userId}")]
+        public IActionResult DeleteUser(int userId)
+        {
+            string sql = @"
+            EXEC TutorialAppSchema.spUser_Delete
+                    @UserId = " + userId.ToString();
+            if(_dapper.ExecuteSql(sql)) return Ok();
+            throw new Exception("Failed to delete user");
+        }
 }
