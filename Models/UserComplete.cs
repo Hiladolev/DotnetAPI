@@ -8,5 +8,9 @@ namespace DotnetAPI.Models
        public string Email {get;set;} = "";
        public string Gender {get;set;} = "";
        public bool Active {get;set;}
+       public decimal Salary {get;set;}
+       public string Department {get;set;} = "";
+       public string JobTitle {get;set;} = "";
+       public decimal AvgSalary {get;set;}
     }
 }
