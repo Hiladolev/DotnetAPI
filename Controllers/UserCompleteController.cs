@@ -41,8 +41,8 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
     IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
     return users;
 }
-[HttpPut("EditUser")]
-public IActionResult EditUser(UserComplete user)
+[HttpPut("UpsertUser")]
+public IActionResult UpsertUser(UserComplete user)
 {
     string sql = @"EXEC TutorialAppSchema.spUser_Upsert
     @FirstName = '" + user.FirstName + 
