@@ -71,7 +71,15 @@ namespace DotnetAPI
         public IActionResult Login(UserForLoginDto userForLogin)
         {
             string sqlForHashAndSalt = @"EXEC TutorialAppSchema.spLoginConfirmation_Get
-            @Email= '" + userForLogin.Email + "'";
+            @Email= @EmailParam";
+
+            List<SqlParameter> sqlParameters = [];
+
+                SqlParameter emailParameter = new("@EmailParam", SqlDbType.VarChar)
+                {
+                    Value = userForLogin.Email
+                };
+                sqlParameters.Add(emailParameter);
             UserForLoginConfirmationDto userForConfirmation = _dapper
             .LoadDataSingle<UserForLoginConfirmationDto>(sqlForHashAndSalt);
             byte[] passwordHash = _authHelper.GetPasswordHash(userForLogin.Password,userForConfirmation.PasswordSalt);
