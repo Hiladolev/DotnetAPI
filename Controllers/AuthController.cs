@@ -37,20 +37,30 @@ namespace DotnetAPI
             rng.GetNonZeroBytes(passwordSalt);
            }
           byte[] passwordHash = _authHelper.GetPasswordHash(userForRegistration.Password,passwordSalt);
-            string sqlAddAuth = @"INSERT INTO TutorialAppSchema.Auth
-            ([Email],
-            [PasswordHash],
-            [PasswordSalt]
-            ) VALUES (
-                '" + userForRegistration.Email +
-                "', @PasswordHash, @PasswordSalt)";
-           List<SqlParameter> sqlParameters = new List<SqlParameter>();
-           SqlParameter passwordSaltParameter = new SqlParameter("@PasswordSalt",SqlDbType.VarBinary);
-                passwordSaltParameter.Value = passwordSalt;
-           SqlParameter passwordHashParameter = new SqlParameter("@PasswordHash",SqlDbType.VarBinary);
-                passwordHashParameter.Value = passwordHash;
-            sqlParameters.Add(passwordSaltParameter);
-            sqlParameters.Add(passwordHashParameter);
+            string sqlAddAuth = @"EXEC TutorialAppSchema.spRegistration_Upsert
+                @Email = @EmailParam,
+                @PasswordHash = @PasswordHashParam, 
+                @PasswordSalt = @PasswordSaltParam
+                )";
+
+           List<SqlParameter> sqlParameters = [];
+
+                SqlParameter emailParameter = new("@EmailParam", SqlDbType.VarChar)
+                {
+                    Value = userForRegistration.Email
+                };
+                sqlParameters.Add(emailParameter);
+                SqlParameter passwordSaltParameter = new("@PasswordSaltParam", SqlDbType.VarBinary)
+                {
+                    Value = passwordSalt
+                };
+                sqlParameters.Add(passwordSaltParameter);
+
+                SqlParameter passwordHashParameter = new("@PasswordHashParam", SqlDbType.VarBinary)
+                {
+                    Value = passwordHash
+                };
+                sqlParameters.Add(passwordHashParameter);
                 if(_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters)) 
                 {
                     string sqlAddUser = @"
