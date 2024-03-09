@@ -59,7 +59,7 @@ namespace DotnetAPI.Helpers
         }
         public bool SetPassword(UserForLoginDto userForSetPassword)
         {
-                       byte[] passwordSalt = new byte[128 / 8];
+            byte[] passwordSalt = new byte[128 / 8];
            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
            {
             rng.GetNonZeroBytes(passwordSalt);
