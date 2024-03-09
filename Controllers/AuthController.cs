@@ -31,36 +31,11 @@ namespace DotnetAPI
             {
                 string sqlCheckUserExist = @"SELECT Email FROM TutorialAppSchema.Auth WHERE Email= '" + userForRegistration.Email + "'";
             if(_dapper.ExecuteSql(sqlCheckUserExist))throw new Exception("Email already exist");
-           byte[] passwordSalt = new byte[128 / 8];
-           using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
-           {
-            rng.GetNonZeroBytes(passwordSalt);
-           }
-          byte[] passwordHash = _authHelper.GetPasswordHash(userForRegistration.Password,passwordSalt);
-            string sqlAddAuth = @"EXEC TutorialAppSchema.spRegistration_Upsert
-                @Email = @EmailParam,
-                @PasswordHash = @PasswordHashParam, 
-                @PasswordSalt = @PasswordSaltParam";
-
-           List<SqlParameter> sqlParameters = [];
-
-                SqlParameter emailParameter = new("@EmailParam", SqlDbType.VarChar)
-                {
-                    Value = userForRegistration.Email
-                };
-                sqlParameters.Add(emailParameter);
-                SqlParameter passwordSaltParameter = new("@PasswordSaltParam", SqlDbType.VarBinary)
-                {
-                    Value = passwordSalt
-                };
-                sqlParameters.Add(passwordSaltParameter);
-
-                SqlParameter passwordHashParameter = new("@PasswordHashParam", SqlDbType.VarBinary)
-                {
-                    Value = passwordHash
-                };
-                sqlParameters.Add(passwordHashParameter);
-                if(_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters)) 
+            UserForLoginDto userForSetPassword = new(){
+                Email = userForRegistration.Email,
+                Password = userForRegistration.Password
+            };
+                if(_authHelper.SetPassword(userForSetPassword)) 
                 {
                     string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
                         @FirstName = '" + userForRegistration.FirstName + 
