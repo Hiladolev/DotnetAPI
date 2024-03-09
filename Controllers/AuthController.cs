@@ -1,5 +1,6 @@
 using System.Data;
 using System.Security.Cryptography;
+using Dapper;
 using DotnetAPI.Data;
 using DotnetAPI.Dtos;
 using DotnetAPI.Helpers;
@@ -73,14 +74,10 @@ namespace DotnetAPI
             string sqlForHashAndSalt = @"EXEC TutorialAppSchema.spLoginConfirmation_Get
             @Email= @EmailParam";
 
-            List<SqlParameter> sqlParameters = [];
+            DynamicParameters sqlParameters = new DynamicParameters();
 
-                SqlParameter emailParameter = new("@EmailParam", SqlDbType.VarChar)
-                {
-                    Value = userForLogin.Email
-                };
-                sqlParameters.Add(emailParameter);
-
+            sqlParameters.Add("@EmailParam", userForLogin.Email, DbType.String);
+            
             UserForLoginConfirmationDto userForConfirmation = _dapper.LoadDataSingleWithParameters<UserForLoginConfirmationDto>(sqlForHashAndSalt,sqlParameters);
             byte[] passwordHash = _authHelper.GetPasswordHash(userForLogin.Password,userForConfirmation.PasswordSalt);
             for (int i = 0; i < passwordHash.Length; i++)
