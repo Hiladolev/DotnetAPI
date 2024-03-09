@@ -70,9 +70,8 @@ namespace DotnetAPI
         [HttpPost("Login")]
         public IActionResult Login(UserForLoginDto userForLogin)
         {
-            string sqlForHashAndSalt = @"SELECT 
-            [PasswordHash],
-            [PasswordSalt] FROM TutorialAppSchema.Auth WHERE Email= '" + userForLogin.Email + "'";
+            string sqlForHashAndSalt = @"EXEC TutorialAppSchema.spLoginConfirmation_Get
+            @Email= '" + userForLogin.Email + "'";
             UserForLoginConfirmationDto userForConfirmation = _dapper
             .LoadDataSingle<UserForLoginConfirmationDto>(sqlForHashAndSalt);
             byte[] passwordHash = _authHelper.GetPasswordHash(userForLogin.Password,userForConfirmation.PasswordSalt);
