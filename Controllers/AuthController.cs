@@ -80,8 +80,8 @@ namespace DotnetAPI
                     Value = userForLogin.Email
                 };
                 sqlParameters.Add(emailParameter);
-            UserForLoginConfirmationDto userForConfirmation = _dapper
-            .LoadDataSingle<UserForLoginConfirmationDto>(sqlForHashAndSalt);
+
+            UserForLoginConfirmationDto userForConfirmation = _dapper.LoadDataSingleWithParameters<UserForLoginConfirmationDto>(sqlForHashAndSalt,sqlParameters);
             byte[] passwordHash = _authHelper.GetPasswordHash(userForLogin.Password,userForConfirmation.PasswordSalt);
             for (int i = 0; i < passwordHash.Length; i++)
             {
