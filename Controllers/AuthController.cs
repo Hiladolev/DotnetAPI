@@ -55,6 +55,17 @@ namespace DotnetAPI
 
         }
 
+        [HttpPut("ResetPassword")]
+
+        public IActionResult ResetPassword(UserForLoginDto userForSetPassword)
+        {
+           if(_authHelper.SetPassword(userForSetPassword))
+           {
+            return Ok();
+           }
+           throw new Exception("Failed to reset password");
+        }
+
         [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login(UserForLoginDto userForLogin)
