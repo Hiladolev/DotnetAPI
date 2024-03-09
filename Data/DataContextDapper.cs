@@ -46,5 +46,17 @@ namespace DotnetAPI.Data
             int rowsAffected = commandWithParams.ExecuteNonQuery();
             return rowsAffected > 0;
         }
+
+        public IEnumerable<T> LoadDataWithParameters<T>(string sql, List<SqlParameter> parameters)
+        {
+            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            return dbConnection.Query<T>(sql, parameters);
+        }
+        
+        public T LoadDataSingleWithParameters<T>(string sql, List<SqlParameter> parameters)
+        {
+            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            return dbConnection.QuerySingle<T>(sql, parameters);
+        }
     }
 }
