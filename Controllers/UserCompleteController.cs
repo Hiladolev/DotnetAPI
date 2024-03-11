@@ -62,6 +62,9 @@ public IActionResult UpsertUser(UserComplete user)
     "', @Salary = '" + user.Salary + 
     "', @Active = '" + user.Active + 
     "', @UserId = " + user.UserId ;
+
+    DynamicParameters sqlParameters = new DynamicParameters();
+
         if(_dapper.ExecuteSql(sql)) return Ok();
             throw new Exception("Failed to update user");
 }
