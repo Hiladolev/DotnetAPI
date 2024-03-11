@@ -26,17 +26,17 @@ public DateTime TestConnection()
 public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
 {
     string sql = @"EXEC TutorialAppSchema.spUsers_Get";
-    string parameters = "";
+    string stringParameters = "";
     if(userId != 0)
     {
-    parameters += ", @UserId =" + userId.ToString();
+    stringParameters += ", @UserId =" + userId.ToString();
     }
     if(isActive)
     {
-    parameters += ", @Active =" + isActive;
+    stringParameters += ", @Active =" + isActive;
     }
 
-    sql += parameters[1..];
+    sql += stringParameters[1..];
     
     IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
     return users;
