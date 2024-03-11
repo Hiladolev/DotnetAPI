@@ -47,6 +47,7 @@ namespace DotnetAPI
                 if(_authHelper.SetPassword(userForSetPassword)) 
                 {
                     UserComplete userComplete = _mapper.Map<UserComplete>(userForRegistration);
+                    userComplete.Active = true;
                         if(_reusableSql.UpsertUser(userComplete))return Ok();
                         throw new Exception("Failed to add user");
                 }
