@@ -8,6 +8,7 @@ using DotnetAPI.Helpers;
 
 namespace DotnetAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 
