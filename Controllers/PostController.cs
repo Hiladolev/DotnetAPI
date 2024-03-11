@@ -49,9 +49,8 @@ namespace DotnetAPI.Controllers
     public IEnumerable<Post> MyPosts()
     {
         string sql = @"EXEC TutorialAppSchema.spPosts_Get @UserId = @UserIdParameter";
-        string? userId = User.FindFirst("UserId")?.Value; 
         DynamicParameters sqlParameters = new DynamicParameters();
-        sqlParameters.Add("@UserIdParameter", userId, DbType.String);
+        sqlParameters.Add("@UserIdParameter", User.FindFirst("userId")?.Value, DbType.Int32);
         return _dapper.LoadDataWithParameters<Post>(sql,sqlParameters);
     }
     [HttpPut("UpsertPost")]
@@ -61,9 +60,8 @@ namespace DotnetAPI.Controllers
             @UserId = @UserIdParameter,
             @PostTitle = @PostTitleParameter,
             @PostContent = @PostContentParameter";
-            string? userId = User.FindFirst("UserId")?.Value;
             DynamicParameters sqlParameters = new DynamicParameters();
-            sqlParameters.Add("@UserIdParameter", userId, DbType.String);
+            sqlParameters.Add("@UserIdParameter",User.FindFirst("userId")?.Value, DbType.Int32);
             sqlParameters.Add("@PostTitleParameter", post.PostTitle, DbType.String);
             sqlParameters.Add("@PostContentParameter", post.PostContent, DbType.String);
             if(post.PostId > 0) 
@@ -79,10 +77,9 @@ namespace DotnetAPI.Controllers
     {
         string sql = @"EXEC TutorialAppSchema.spPost_Delete
             @PostId = @PostIdParameter, @UserId = @UserIdParameter";
-        string? userId = User.FindFirst("UserId")?.Value;
         DynamicParameters sqlParameters = new DynamicParameters();
         sqlParameters.Add("@PostIdParameter", postId, DbType.Int32);
-        sqlParameters.Add("@UserIdParameter", userId, DbType.String);
+        sqlParameters.Add("@UserIdParameter", User.FindFirst("userId")?.Value, DbType.Int32);
         if(_dapper.ExecuteSqlWithParameters(sql, sqlParameters)) return StatusCode(204);
         throw new Exception("Failed to delete post");
     }
