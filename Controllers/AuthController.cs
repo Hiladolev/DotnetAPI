@@ -18,10 +18,12 @@ namespace DotnetAPI
     {
         private readonly DataContextDapper _dapper;
         private readonly AuthHelper _authHelper;
+        private readonly ReusableSql _reusableSql;
         public AuthController(IConfiguration config)
         {
             _dapper = new DataContextDapper(config);
             _authHelper = new AuthHelper(config);
+            _reusableSql = new ReusableSql(config);
         }
 
         [AllowAnonymous]
