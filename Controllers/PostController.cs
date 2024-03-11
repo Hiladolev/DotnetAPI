@@ -25,12 +25,21 @@ namespace DotnetAPI.Controllers
         string sql = @"EXEC TutorialAppSchema.spPosts_Get";
         string stringParameters = "";
         DynamicParameters sqlParameters = new DynamicParameters();
-        sqlParameters.Add("@PostIdParameter", postId, DbType.Int64);
-        sqlParameters.Add("@UserIdParameter", userId, DbType.Int64);
-        sqlParameters.Add("@SearchValueParameter", searchParam, DbType.String);
-        if(postId != 0) stringParameters += ", @PostId = @PostIdParameter";
-        if(userId != 0) stringParameters += ", @UserId = @UserIdParameter";
-        if(searchParam.ToLower() != "none") stringParameters += ", @SearchValue = @SearchValueParameter";
+        if(postId != 0)
+        {
+            stringParameters += ", @PostId = @PostIdParameter";
+            sqlParameters.Add("@PostIdParameter", postId, DbType.Int64);
+        } 
+        if(userId != 0)
+        {
+            stringParameters += ", @UserId = @UserIdParameter";
+            sqlParameters.Add("@UserIdParameter", userId, DbType.Int64);
+        } 
+        if(searchParam.ToLower() != "none")
+        {
+            stringParameters += ", @SearchValue = @SearchValueParameter";
+            sqlParameters.Add("@SearchValueParameter", searchParam, DbType.String);
+        }
         if(stringParameters.Length > 0)sql += stringParameters[1..];
         return _dapper.LoadDataWithParameters<Post>(sql, sqlParameters);
 
