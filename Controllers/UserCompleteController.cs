@@ -1,10 +1,10 @@
 using DotnetAPI.Data;
-using DotnetAPI.Dtos;
 using DotnetAPI.Models;
 using Dapper;
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using DotnetAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DotnetAPI.Controllers;
 
