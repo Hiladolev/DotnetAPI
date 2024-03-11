@@ -46,17 +46,8 @@ namespace DotnetAPI
             };
                 if(_authHelper.SetPassword(userForSetPassword)) 
                 {
-                    UserComplete newUser = new(){
-                        Email = userForRegistration.Email,
-                        FirstName = userForRegistration.FirstName,
-                        LastName = userForRegistration.LastName,
-                        Gender = userForRegistration.Gender,
-                        JobTitle = userForRegistration.JobTitle,
-                        Department = userForRegistration.Department, 
-                        Salary = userForRegistration.Salary,
-                        Active = true
-                    };
-                        if(_reusableSql.UpsertUser(newUser))return Ok();
+                    UserComplete userComplete = _mapper.Map<UserComplete>(userForRegistration);
+                        if(_reusableSql.UpsertUser(userComplete))return Ok();
                         throw new Exception("Failed to add user");
                 }
                 throw new Exception("Failed to register user");
