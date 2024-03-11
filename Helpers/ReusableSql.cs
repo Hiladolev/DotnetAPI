@@ -39,8 +39,7 @@ namespace DotnetAPI.Helpers
                 sqlParameters.Add("@ActiveParameter", user.Active, DbType.Boolean);
                 sqlParameters.Add("@UserIdParameter", user.UserId, DbType.Int32);
 
-                    if(_dapper.ExecuteSqlWithParameters(sql, sqlParameters)) return Ok();
-                        throw new Exception("Failed to update user");
+                    return _dapper.ExecuteSqlWithParameters(sql, sqlParameters)
             }
     }
 }
