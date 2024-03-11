@@ -41,7 +41,10 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
     sqlParameters.Add("@ActiveParameter", isActive, DbType.Boolean);
     }
 
-    sql += stringParameters[1..];
+    if(stringParameters.Length > 0)
+    {
+        sql += stringParameters[1..];
+    }
     
     IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
     return users;
