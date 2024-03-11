@@ -39,7 +39,7 @@ namespace DotnetAPI.Helpers
                 sqlParameters.Add("@ActiveParameter", user.Active, DbType.Boolean);
                 sqlParameters.Add("@UserIdParameter", user.UserId, DbType.Int32);
 
-                    return _dapper.ExecuteSqlWithParameters(sql, sqlParameters)
+                    return _dapper.ExecuteSqlWithParameters(sql, sqlParameters);
             }
     }
 }
