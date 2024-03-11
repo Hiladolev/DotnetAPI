@@ -46,7 +46,7 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
         sql += stringParameters[1..];
     }
     
-    IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
+    IEnumerable<UserComplete> users = _dapper.LoadDataWithParameters<UserComplete>(sql, sqlParameters);
     return users;
 }
 [HttpPut("UpsertUser")]
