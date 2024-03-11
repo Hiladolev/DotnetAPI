@@ -84,8 +84,13 @@ public IActionResult UpsertUser(UserComplete user)
         {
             string sql = @"
             EXEC TutorialAppSchema.spUser_Delete
-                    @UserId = " + userId.ToString();
-            if(_dapper.ExecuteSql(sql)) return Ok();
+                    @UserId = @UserIdParameter";
+
+            DynamicParameters sqlParameters = new DynamicParameters();
+
+            sqlParameters.Add("@UserIdParameter", userId, DbType.Int32);
+
+            if(_dapper.ExecuteSqlWithParameters(sql,sqlParameters)) return Ok();
             throw new Exception("Failed to delete user");
         }
 }
