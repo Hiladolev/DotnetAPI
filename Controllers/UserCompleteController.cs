@@ -1,6 +1,8 @@
 using DotnetAPI.Data;
 using DotnetAPI.Dtos;
 using DotnetAPI.Models;
+using Dapper;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetAPI.Controllers;
@@ -27,13 +29,16 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
 {
     string sql = @"EXEC TutorialAppSchema.spUsers_Get";
     string stringParameters = "";
+    DynamicParameters sqlParameters = new DynamicParameters();
     if(userId != 0)
     {
     stringParameters += ", @UserId =" + userId.ToString();
+    sqlParameters.Add("UserIdParameter", userId, DbType.Int32);
     }
     if(isActive)
     {
     stringParameters += ", @Active =" + isActive;
+    sqlParameters.Add("ActiveParameter", isActive, DbType.Boolean);
     }
 
     sql += stringParameters[1..];
