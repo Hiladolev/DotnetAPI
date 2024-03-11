@@ -4,6 +4,7 @@ using Dapper;
 using DotnetAPI.Data;
 using DotnetAPI.Dtos;
 using DotnetAPI.Helpers;
+using DotnetAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -40,16 +41,17 @@ namespace DotnetAPI
             };
                 if(_authHelper.SetPassword(userForSetPassword)) 
                 {
-                    string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
-                        @FirstName = '" + userForRegistration.FirstName + 
-                        "',@LastName = '" + userForRegistration.LastName + 
-                        "', @Email = '" + userForRegistration.Email + 
-                        "', @Gender = '" + userForRegistration.Gender + 
-                        "', @JobTitle = '" + userForRegistration.JobTitle + 
-                        "', @Department = '" + userForRegistration.Department + 
-                        "', @Salary = '" + userForRegistration.Salary + 
-                        "', @Active = " + 1;
-                        if(_dapper.ExecuteSql(sqlAddUser))return Ok();
+                    UserComplete newUser = new(){
+                        Email = userForRegistration.Email,
+                        FirstName = userForRegistration.FirstName,
+                        LastName = userForRegistration.LastName,
+                        Gender = userForRegistration.Gender,
+                        JobTitle = userForRegistration.JobTitle,
+                        Department = userForRegistration.Department, 
+                        Salary = userForRegistration.Salary,
+                        Active = true
+                    };
+                        if(_reusableSql.UpsertUser(newUser))return Ok();
                         throw new Exception("Failed to add user");
                 }
                 throw new Exception("Failed to register user");
