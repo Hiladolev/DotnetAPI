@@ -55,30 +55,7 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
 [HttpPut("UpsertUser")]
 public IActionResult UpsertUser(UserComplete user)
 {
-    string sql = @"EXEC TutorialAppSchema.spUser_Upsert
-    @FirstName = @FirstNameParameter,
-    @LastName = @LastNameParameter,
-    @Email = @EmailParameter,
-    @Gender = @GenderParameter,
-    @JobTitle = @JobTitleParameter,
-    @Department = @DepartmentParameter,
-    @Salary = @SalaryParameter,
-    @Active = @ActiveParameter,
-    @UserId = @UserIdParameter";
-
-    DynamicParameters sqlParameters = new DynamicParameters();
-
-    sqlParameters.Add("@FirstNameParameter", user.FirstName, DbType.String);
-    sqlParameters.Add("@LastNameParameter", user.LastName, DbType.String);
-    sqlParameters.Add("@EmailParameter", user.Email, DbType.String);
-    sqlParameters.Add("@GenderParameter", user.Gender, DbType.String);
-    sqlParameters.Add("@JobTitleParameter", user.JobTitle, DbType.String);
-    sqlParameters.Add("@DepartmentParameter", user.Department, DbType.String);
-    sqlParameters.Add("@SalaryParameter", user.Salary, DbType.Decimal);
-    sqlParameters.Add("@ActiveParameter", user.Active, DbType.Boolean);
-    sqlParameters.Add("@UserIdParameter", user.UserId, DbType.Int32);
-
-        if(_dapper.ExecuteSqlWithParameters(sql, sqlParameters)) return Ok();
+        if(_reusableSql.UpsertUser(user)) return Ok();
             throw new Exception("Failed to update user");
 }
 
