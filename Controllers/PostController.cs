@@ -23,15 +23,15 @@ namespace DotnetAPI.Controllers
     public IEnumerable<Post> Posts(int postId = 0, int userId = 0, string searchParam = "None")
     {
         string sql = @"EXEC TutorialAppSchema.spPosts_Get";
-        string parameters = "";
+        string stringParameters = "";
         DynamicParameters sqlParameters = new DynamicParameters();
         sqlParameters.Add("@PostIdParameter", postId, DbType.Int64);
         sqlParameters.Add("@UserIdParameter", userId, DbType.Int64);
         sqlParameters.Add("@SearchValueParameter", searchParam, DbType.String);
-        if(postId != 0) parameters += ", @PostId = @PostIdParameter";
-        if(userId != 0) parameters += ", @UserId = @UserIdParameter";
-        if(searchParam.ToLower() != "none") parameters += ", @SearchValue = @SearchValueParameter";
-        if(parameters.Length > 0)sql += parameters[1..];
+        if(postId != 0) stringParameters += ", @PostId = @PostIdParameter";
+        if(userId != 0) stringParameters += ", @UserId = @UserIdParameter";
+        if(searchParam.ToLower() != "none") stringParameters += ", @SearchValue = @SearchValueParameter";
+        if(stringParameters.Length > 0)sql += stringParameters[1..];
         return _dapper.LoadDataWithParameters<Post>(sql, sqlParameters);
 
     }
