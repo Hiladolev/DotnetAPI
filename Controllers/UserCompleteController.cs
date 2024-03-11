@@ -4,6 +4,7 @@ using DotnetAPI.Models;
 using Dapper;
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using DotnetAPI.Helpers;
 
 namespace DotnetAPI.Controllers;
 
@@ -12,10 +13,12 @@ namespace DotnetAPI.Controllers;
 
 public class UserCompleteController : ControllerBase
 {
-DataContextDapper _dapper;
+    private readonly DataContextDapper _dapper;
+    private readonly ReusableSql _reusableSql;
 public UserCompleteController(IConfiguration config)
 {
 _dapper = new DataContextDapper(config);
+_reusableSql = new ReusableSql(config);
 }
 
 [HttpGet("TextConnection")]
