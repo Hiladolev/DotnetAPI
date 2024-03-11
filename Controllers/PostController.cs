@@ -28,12 +28,12 @@ namespace DotnetAPI.Controllers
         if(postId != 0)
         {
             stringParameters += ", @PostId = @PostIdParameter";
-            sqlParameters.Add("@PostIdParameter", postId, DbType.Int64);
+            sqlParameters.Add("@PostIdParameter", postId, DbType.Int32);
         } 
         if(userId != 0)
         {
             stringParameters += ", @UserId = @UserIdParameter";
-            sqlParameters.Add("@UserIdParameter", userId, DbType.Int64);
+            sqlParameters.Add("@UserIdParameter", userId, DbType.Int32);
         } 
         if(searchParam.ToLower() != "none")
         {
