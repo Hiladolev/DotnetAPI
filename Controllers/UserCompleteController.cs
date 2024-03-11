@@ -32,13 +32,13 @@ public IEnumerable<UserComplete> GetUsers(int userId,bool isActive)
     DynamicParameters sqlParameters = new DynamicParameters();
     if(userId != 0)
     {
-    stringParameters += ", @UserId =" + userId.ToString();
-    sqlParameters.Add("UserIdParameter", userId, DbType.Int32);
+    stringParameters += ", @UserId = @UserIdParameter";
+    sqlParameters.Add("@UserIdParameter", userId, DbType.Int32);
     }
     if(isActive)
     {
-    stringParameters += ", @Active =" + isActive;
-    sqlParameters.Add("ActiveParameter", isActive, DbType.Boolean);
+    stringParameters += ", @Active = @ActiveParameter";
+    sqlParameters.Add("@ActiveParameter", isActive, DbType.Boolean);
     }
 
     sql += stringParameters[1..];
